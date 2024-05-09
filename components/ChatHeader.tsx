@@ -25,12 +25,11 @@ export const ChatHeader = ({user} : {user : User | null}) => {
     const supabase = supabaseBrowserClient()
     const { error } = await supabase.auth.signOut()
     // what is this joke .. 
-    router.refresh()
+    router.refresh()  
   }
 
 
     return (
-        <div className="h-full border rounded-md">
         <div className="flex p-5 justify-between border-b-[1px]">
           <div className="flex-col">
           <h1 className="font-semibold text-lg"> Kizuna Chat </h1>
@@ -49,6 +48,5 @@ export const ChatHeader = ({user} : {user : User | null}) => {
         )}
           
         </div>
-      </div>
     )
 }
