@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Sans, Space_Grotesk } from "next/font/google";
-import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "sonner";
+import "./globals.css";
+
 
 const ibm= Space_Grotesk({
   subsets: ["latin"]})
@@ -25,6 +27,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange>
           {children}
+          <Toaster/>
         </ThemeProvider>
       </body>
     </html>
