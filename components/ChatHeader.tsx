@@ -28,7 +28,6 @@ export const ChatHeader = ({user} : {user : User | null}) => {
     router.refresh()  
   }
 
-
     return (
         <div className="flex p-5 justify-between border-b-[1px]">
           <div className="flex-col">
