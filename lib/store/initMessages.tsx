@@ -1,10 +1,10 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import { MessageType, useMessageStore } from "./messages"
+import { MessageProps, useMessageStore } from "../hooks/useMessages"
 
 
-export default function InitMessage ({message} : {message: MessageType[]}) {
+export default function InitMessage ({message} : {message: MessageProps[]}) {
 
     const initState = useRef(false)
 

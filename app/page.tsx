@@ -15,7 +15,7 @@ export default async function Home() {
   }
 
   const data = await getCurrentUser()
-
+  
   return (
     <>
       <main className="md:py-10 md:max-w-xl h-screen mx-auto">

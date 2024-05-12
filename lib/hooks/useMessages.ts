@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-interface MessageType {
+interface MessageProps {
     content: string;
     created_at: string;
     id: number;
@@ -15,8 +15,8 @@ interface MessageType {
 }
 
 interface MessageState {
-    message: MessageType[],
-    addMessage: (message: MessageType) => void
+    message: MessageProps[],
+    addMessage: (message: MessageProps) => void
 
 }
 
@@ -25,4 +25,4 @@ export const useMessageStore = create<MessageState>()((set) => ({
     addMessage: (message) => set((state) => ({message: [...state.message, message]}))
 }))
 
-export type {MessageType}
+export type {MessageProps}

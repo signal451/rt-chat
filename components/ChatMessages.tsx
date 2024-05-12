@@ -4,7 +4,6 @@ import InitMessage from "@/lib/store/initMessages";
 import ListMessages from "./ListOfMessages";
 import SkeltonMessage from "./SkeltonMessage";
 
-
 export default async function ChatMessages() {
 
     const supabase = supabaseServerClient()

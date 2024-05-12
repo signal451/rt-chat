@@ -1,7 +1,7 @@
 "use client"
 import { User } from "@supabase/supabase-js"
 import { useEffect, useRef } from "react"
-import { useUserStore } from "./user"
+import { useUserStore } from "../hooks/useUser"
 
 
 // questionable code for sure
