@@ -21,9 +21,9 @@ export default async function Home() {
       <main className="md:py-10 md:max-w-xl h-screen mx-auto">
         <div className="h-full border rounded-md flex flex-col">
           <ChatHeader user={data} /> 
-          <div className="flex-1 flex flex-col p-5 overflow-y-auto">
+          <div className="flex-1 flex flex-col p-4 overflow-y-auto">
             <div className="flex-1"> </div>
-            <div className="space-y-5">
+            <div>
               <ChatMessages/>
             </div>
           </div>
