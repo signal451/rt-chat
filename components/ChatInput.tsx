@@ -3,9 +3,7 @@ import { Input } from "@/components/ui/input"
 import { MessageProps, useMessageStore } from "@/lib/hooks/useMessages";
 import { useUserStore } from "@/lib/hooks/useUser";
 import { supabaseBrowserClient } from "@/utils/supabase/client"
-import { Cagliostro } from "next/font/google";
 import { toast } from "sonner"
-
 
 
 export default function ChatInput() {

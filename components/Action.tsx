@@ -33,6 +33,7 @@ export const MessageMenu :React.FC<MessageMenuProp> = ({actionProps, update}) =>
             <DropdownMenuContent>
                 <DropdownMenuGroup>
                     <DropdownMenuItem className="justify-between" onClick={() => {
+                        setActionMsg(actionProps)
                         update(true)
                     }}>
                         <span>Edit message </span>

@@ -19,8 +19,6 @@ export const DeleteAction = () => {
   const message = useMessageStore((state) => state.actionMsg)
   const deleteMessage = useMessageStore((state) => state.deleteMsg)
 
-
-  // THERE SEEMS BUG IN HERE ??? 
   const handleDeleteMessage = async () => {
     const supabase = supabaseBrowserClient()
     console.log("deleted message id:" + message?.id);

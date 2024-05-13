@@ -1,20 +1,41 @@
 import Image from "next/image"
-import { MessageProps } from "@/lib/hooks/useMessages"
+import { MessageProps, useMessageStore } from "@/lib/hooks/useMessages"
 import { useUserStore } from "@/lib/hooks/useUser"
 import { MessageMenu } from "./Action"
 import { Input } from "./ui/input"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
-
+import { supabaseBrowserClient } from "@/utils/supabase/client"
+import { toast } from "sonner"
 
 export const Message = ({ props }: { props: MessageProps }) => {
 
   const user = useUserStore((state) => state.user)
+  const message = useMessageStore((state) => state.actionMsg)
   const [isEdit, setIsEdit] = useState<boolean>(false)
+
+  const handleUpdateMessage = async (newMessage: string) => {
+    const supabase = supabaseBrowserClient()
+    const {data, error} = await supabase.from('messages').update({content: newMessage}).eq('id', message?.id!)
+
+    console.log(data);
+
+    if(error) {
+      console.error(error);
+      return toast.error("Failed to update message", {
+        description: new Date().toLocaleString(),
+        position: 'top-center'
+      })
+    }
+    else {
+      console.log("message is updated")
+    }
+
+  }
 
   const handleWhenEdit = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
-      // update message to supabase
+      handleUpdateMessage(e.currentTarget.value)
       setIsEdit(false)
     }
   }
