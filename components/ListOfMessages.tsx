@@ -1,7 +1,7 @@
 "use client"
 import { useMessageStore } from "@/lib/hooks/useMessages"
 import { Message } from "./Message"
-import DeleteAlert from "./MessageAction"
+import {DeleteAction} from "./MessageAction"
 
 export default function ListMessages() {
 
@@ -16,7 +16,8 @@ export default function ListMessages() {
           <Message props={value} key={index} />
         )
       })}
-      <DeleteAlert/>
+      <DeleteAction/>
+      {/* <UpdateAction/> */}
       </div>
     )
 }

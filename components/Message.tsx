@@ -1,13 +1,17 @@
 
 import { MessageProps } from "@/lib/hooks/useMessages"
 import { useUserStore } from "@/lib/hooks/useUser"
-import Image from "next/image"
 import { MessageMenu } from "./Action"
+import { Input } from "./ui/input"
+import { useState } from "react"
+import Image from "next/image"
+import { cn } from "@/lib/utils"
 
 
 export const Message = ({ props }: { props: MessageProps }) => {
 
   const user = useUserStore((state) => state.user)
+  const [isEdit, setIsEdit] = useState<boolean>(false)
 
   return (
     <div className="flex gap-x-2 hover:bg-neutral-900 hover:rounded-md p-3">
@@ -27,9 +31,15 @@ export const Message = ({ props }: { props: MessageProps }) => {
             <p className="font-bold"> {props.users?.username} </p>
             <p className="text-xs  text-gray-400 pt-1"> {new Date(props.created_at).toLocaleString()} </p>
           </div>
-          {props.user_id === user?.id && (<MessageMenu actionProps={props} />)}
+          {props.user_id === user?.id && (<MessageMenu actionProps={props} update={setIsEdit}/>)}
         </div>
-        <p className="text-gray-300 "> {props.content}</p>
+        <div className={cn("pt-0", isEdit && "pt-2")}>
+         {isEdit ? (<Input id="message" defaultValue={props.content} onKeyDown={(e) => {
+          if(e.key === "Enter") {
+            setIsEdit(false)
+          } 
+         }} />) : (<p className="text-gray-300 "> {props.content}</p>) }
+        </div>
       </div>
     </div>
   )

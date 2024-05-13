@@ -5,7 +5,6 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { MessageProps, useMessageStore } from "@/lib/hooks/useMessages"
 
 import {
     Trash2,
@@ -13,7 +12,16 @@ import {
     Pencil
 } from "lucide-react"
 
-export const MessageMenu = ({ actionProps }: { actionProps: MessageProps }) => {
+import { MessageProps, useMessageStore } from "@/lib/hooks/useMessages"
+import React, { Dispatch, SetStateAction } from "react"
+
+interface MessageMenuProp {
+    actionProps: MessageProps,
+    update: Dispatch<SetStateAction<boolean>>
+}
+
+
+export const MessageMenu :React.FC<MessageMenuProp> = ({actionProps, update}) => {
 
     const setActionMsg = useMessageStore((state) => state.addActionMsg)
 
@@ -24,7 +32,9 @@ export const MessageMenu = ({ actionProps }: { actionProps: MessageProps }) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
                 <DropdownMenuGroup>
-                    <DropdownMenuItem className="justify-between">
+                    <DropdownMenuItem className="justify-between" onClick={() => {
+                        update(true)
+                    }}>
                         <span>Edit message </span>
                         <Pencil className=" h-4 w-4" />
                     </DropdownMenuItem>
