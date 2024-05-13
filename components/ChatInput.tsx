@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input"
 import { MessageProps, useMessageStore } from "@/lib/hooks/useMessages";
 import { useUserStore } from "@/lib/hooks/useUser";
 import { supabaseBrowserClient } from "@/utils/supabase/client"
+import { Cagliostro } from "next/font/google";
 import { toast } from "sonner"
 
 
@@ -11,15 +12,17 @@ export default function ChatInput() {
 
     const user = useUserStore((state) => state.user)
     const addMessage = useMessageStore((state) => state.addMessage)
-    const message = useMessageStore((state) => state.message)
+    const messageStore = useMessageStore((state) => state.message)
     
     const handleSendMessage =  async (message : string) => {
 
         if(message.trim()) {
         const supabase = supabaseBrowserClient()
 
+        const { data, error } = await supabase.from('messages').insert({content: message}).select('id')
+
         const newMessage = {
-            id: message.length + 1,
+            id: data?.[0]?.id,
             content: message,
             is_edit: false,
             user_id: user?.id,
@@ -32,7 +35,6 @@ export default function ChatInput() {
             }
         }
 
-        const { error } = await supabase.from('messages').insert({content: message})
 
         if (error) {
             return toast.error(error.message, {
@@ -40,7 +42,6 @@ export default function ChatInput() {
                 position: 'top-center'
             })
         }
-
 
         addMessage(newMessage as MessageProps)
     }
