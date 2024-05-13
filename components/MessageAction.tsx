@@ -10,8 +10,38 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
+import { useMessageStore } from "@/lib/hooks/useMessages";
+import { supabaseBrowserClient } from "@/utils/supabase/client";
+import { toast } from "sonner";
+
 
 export default function DeleteAlert () {
+
+  const message = useMessageStore((state) => state.actionMsg)
+  const deleteMessage = useMessageStore((state) => state.deleteMsg)
+
+  const handleDeleteMessage = async () => {
+    const supabase = supabaseBrowserClient()
+    const {data, error} = await supabase.from('messages').delete().eq("id", message?.id!)
+
+    if(error) {
+      return toast.error("Failed to delete message", {
+        description: new Date().toLocaleString(),
+        position: 'top-center'
+      })
+    }
+    else {
+
+      deleteMessage(message?.id!)
+
+      toast.success("Successfully deleted message", {
+        position: 'top-center'
+      })
+    }
+
+  }
+
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -26,7 +56,7 @@ export default function DeleteAlert () {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Delete</AlertDialogAction>
+          <AlertDialogAction onClick={handleDeleteMessage}>Delete</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

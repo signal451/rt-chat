@@ -16,13 +16,23 @@ interface MessageProps {
 
 interface MessageState {
     message: MessageProps[],
-    addMessage: (message: MessageProps) => void
+    actionMsg: MessageProps | undefined,
+    addMessage: (message: MessageProps) => void,
+    addActionMsg: (message: MessageProps) => void,
+    deleteMsg: (messageId: number) => void
 
 }
 
 export const useMessageStore = create<MessageState>()((set) => ({
     message: [],
-    addMessage: (message) => set((state) => ({message: [...state.message, message]}))
+    actionMsg: undefined,
+    addMessage: (message) => set((state) => ({message: [...state.message, message]})),
+    addActionMsg: (message) => set((state) => ({actionMsg: message})),
+    deleteMsg: (messageId) => set((state) => {
+        return {
+            message: state.message.filter((element) => element.id !== messageId)
+        }
+    }),
 }))
 
 export type {MessageProps}

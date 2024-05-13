@@ -5,6 +5,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { MessageProps, useMessageStore } from "@/lib/hooks/useMessages"
 
 import {
     Trash2,
@@ -12,7 +13,10 @@ import {
     Pencil
 } from "lucide-react"
 
-export const MessageMenu = () => {
+export const MessageMenu = ({ actionProps }: { actionProps: MessageProps }) => {
+
+    const setActionMsg = useMessageStore((state) => state.addActionMsg)
+
     return (
         <DropdownMenu>
             <DropdownMenuTrigger>
@@ -27,6 +31,7 @@ export const MessageMenu = () => {
                 </DropdownMenuGroup>
                 <DropdownMenuGroup>
                     <DropdownMenuItem className="justify-between" onClick={() => {
+                        setActionMsg(actionProps)
                         document.getElementById("trigger-delete")?.click()
                     }}>
                         <span className="text-red-500 pr-5">Delete message </span>

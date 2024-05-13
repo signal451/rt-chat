@@ -27,7 +27,7 @@ export const Message = ({ props }: { props: MessageProps }) => {
             <p className="font-bold"> {props.users?.username} </p>
             <p className="text-xs  text-gray-400 pt-1"> {new Date(props.created_at).toLocaleString()} </p>
           </div>
-          {props.user_id === user?.id && (<MessageMenu />)}
+          {props.user_id === user?.id && (<MessageMenu actionProps={props} />)}
         </div>
         <p className="text-gray-300 "> {props.content}</p>
       </div>

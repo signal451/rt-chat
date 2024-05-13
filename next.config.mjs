@@ -12,5 +12,5 @@ const nextConfig = {
 };
 
 
-export default process.env.ANALYZE === 'true' ? withBundleAnalyzer(nextConfig) : nextConfig;
+export default process.env.ANALYZE === 'true' ? NextBundleAnalyzer(nextConfig) : nextConfig;
 
