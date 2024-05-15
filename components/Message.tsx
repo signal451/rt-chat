@@ -58,7 +58,7 @@ export const Message = ({ props }: { props: MessageProps }) => {
   }
 
   return (
-    <div className="flex gap-x-2 hover:bg-neutral-900 hover:rounded-md p-3 items-center">
+    <div className="flex gap-x-2 hover:bg-neutral-900 hover:rounded-md p-3 items-start">
       <div>
         <Image
           src={props.users?.avatar_url || ''}
@@ -70,7 +70,7 @@ export const Message = ({ props }: { props: MessageProps }) => {
         />
       </div>
       <div className="flex-1">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between ">
           <div className="flex gap-x-2">
             <p className="font-bold"> {props.users?.username} </p>
             <p className="text-xs  text-gray-400 pt-1"> {new Date(props.created_at).toLocaleString()} </p>
