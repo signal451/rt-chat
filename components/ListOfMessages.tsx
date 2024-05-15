@@ -8,7 +8,15 @@ import { toast } from "sonner"
 
 export default function ListMessages() {
 
-  const { message, addMessage } = useMessageStore((state) => state)
+  interface Payload {
+    content: string;
+    created_at: string;
+    id: number;
+    is_edit: boolean;
+    user_id: string;
+  }
+
+  const { message, addMessage, deleteMsg, updateMsg } = useMessageStore((state) => state)
   const supabase = supabaseBrowserClient()
 
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>
@@ -16,10 +24,10 @@ export default function ListMessages() {
   useEffect(() => {
     const channel = supabase
       .channel('chat-room')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages'}, payload => {
 
         const user_id = payload.new.user_id
-        const fetch = async () => {
+        const fetchInsert = async () => {
           const { data, error } = await supabase.from("users").select('*').eq('id', user_id).single()
 
           if (error) {
@@ -36,7 +44,21 @@ export default function ListMessages() {
             addMessage(rt_message as MessageProps)
           }
         }
-        fetch()
+        fetchInsert()
+      })
+      .on('postgres_changes',  { event: 'DELETE', schema: 'public', table: 'messages'}, payload => {
+        deleteMsg(payload.old.id)
+      })
+      .on('postgres_changes', {event: 'UPDATE', schema: 'public', table: 'messages'}, payload => {
+        const fetchUpdate = async () => {
+          const { data, error } = await supabase.from("users").select('*').eq('id', payload.new.user_id).single()
+          const rt_message = {
+            ...payload.new,
+            users: data
+          }
+          updateMsg(rt_message as MessageProps) 
+        }
+        fetchUpdate()
       })
       .subscribe()
 
@@ -55,7 +77,9 @@ export default function ListMessages() {
         behavior: "smooth"
       })
     }
-    
+
+    // useEffect added hiij baigaa tohioldol deer l scroll to bottom hiimeer bn ?
+  
 
   }, [message])
 

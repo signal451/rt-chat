@@ -5,7 +5,6 @@ import { supabaseBrowserClient } from "@/utils/supabase/client"
 import { User } from "@supabase/supabase-js"
 import { useRouter } from "next/navigation"
 
-// this is real shit ??? since I don't want to get undefined or null value on my ChatHeader
 export const ChatHeader = ({ user }: { user: User | null }) => {
 
   const router = useRouter()
@@ -23,7 +22,6 @@ export const ChatHeader = ({ user }: { user: User | null }) => {
   const handleLogOut = async () => {
     const supabase = supabaseBrowserClient()
     const { error } = await supabase.auth.signOut()
-    // what is this joke .. 
     router.refresh()
   }
 
