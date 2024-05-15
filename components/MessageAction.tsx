@@ -19,7 +19,9 @@ export const DeleteAction = () => {
   const message = useMessageStore((state) => state.actionMsg)
   const deleteMessage = useMessageStore((state) => state.deleteMsg)
 
-  const handleDeleteMessage = async () => {
+  const handleDeleteMessage = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation()
+
     const supabase = supabaseBrowserClient()
     const {data, error} = await supabase.from('messages').delete().eq("id", message?.id!)
 

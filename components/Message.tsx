@@ -16,11 +16,11 @@ export const Message = ({ props }: { props: MessageProps }) => {
   const [isEdit, setIsEdit] = useState<boolean>(false)
 
   const handleUpdateMessage = async (newMessage: string) => {
-    // let's check if message is changed first
-    if(newMessage.trim().length === 0) {
-      setIsEdit(true)
-      return toast.error("You can't send empty message ", {
-        position: 'top-center'
+
+
+    if (newMessage.length === 0) {
+      return toast.error("Can't send empty message", {
+        position: "top-center"
       })
     }
 
@@ -48,9 +48,16 @@ export const Message = ({ props }: { props: MessageProps }) => {
   }
 
   const handleWhenEdit = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const val = e.currentTarget.value.trim()
+
     if (e.key === "Enter") {
       handleUpdateMessage(e.currentTarget.value)
     }
+
+    if (e.key === "Escape") {
+      setIsEdit(false)
+    }
+
   }
 
   return (
