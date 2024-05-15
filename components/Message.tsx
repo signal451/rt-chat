@@ -12,23 +12,37 @@ export const Message = ({ props }: { props: MessageProps }) => {
 
   const user = useUserStore((state) => state.user)
   const message = useMessageStore((state) => state.actionMsg)
+  const optimisticUpdateMsg = useMessageStore((state) => state.updateMsg)
   const [isEdit, setIsEdit] = useState<boolean>(false)
 
   const handleUpdateMessage = async (newMessage: string) => {
-    const supabase = supabaseBrowserClient()
-    const {data, error} = await supabase.from('messages').update({content: newMessage}).eq('id', message?.id!)
+    // let's check if message is changed first
+    if(newMessage.trim().length === 0) {
+      setIsEdit(true)
+      return toast.error("You can't send empty message ", {
+        position: 'top-center'
+      })
+    }
 
-    console.log(data);
+    const supabase = supabaseBrowserClient()
+    const {error} = await supabase.from('messages').update({content: newMessage.trim()}).eq('id', message?.id!)
 
     if(error) {
       console.error(error);
+      setIsEdit(true)
       return toast.error("Failed to update message", {
         description: new Date().toLocaleString(),
         position: 'top-center'
       })
     }
     else {
-      console.log("message is updated")
+      setIsEdit(false)
+      optimisticUpdateMsg({
+        ...props,
+        content: newMessage.trim(),
+        is_edit: true
+      })
+      
     }
 
   }
@@ -36,7 +50,6 @@ export const Message = ({ props }: { props: MessageProps }) => {
   const handleWhenEdit = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       handleUpdateMessage(e.currentTarget.value)
-      setIsEdit(false)
     }
   }
 

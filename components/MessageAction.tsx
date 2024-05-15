@@ -21,7 +21,6 @@ export const DeleteAction = () => {
 
   const handleDeleteMessage = async () => {
     const supabase = supabaseBrowserClient()
-    console.log("deleted message id:" + message?.id);
     const {data, error} = await supabase.from('messages').delete().eq("id", message?.id!)
 
     if(error) {
@@ -36,7 +35,6 @@ export const DeleteAction = () => {
         position: 'top-center'
       })
     }
-
   }
 
   return (
