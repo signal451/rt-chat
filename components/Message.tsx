@@ -25,9 +25,9 @@ export const Message = ({ props }: { props: MessageProps }) => {
     }
 
     const supabase = supabaseBrowserClient()
-    const {error} = await supabase.from('messages').update({content: newMessage.trim()}).eq('id', message?.id!)
+    const { error } = await supabase.from('messages').update({ content: newMessage, is_edit: true}).eq('id', message?.id!)
 
-    if(error) {
+    if (error) {
       console.error(error);
       setIsEdit(true)
       return toast.error("Failed to update message", {
@@ -42,16 +42,13 @@ export const Message = ({ props }: { props: MessageProps }) => {
         content: newMessage.trim(),
         is_edit: true
       })
-      
     }
-
   }
 
   const handleWhenEdit = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    const val = e.currentTarget.value.trim()
 
     if (e.key === "Enter") {
-      handleUpdateMessage(e.currentTarget.value)
+      handleUpdateMessage(e.currentTarget.value.trim())
     }
 
     if (e.key === "Escape") {
@@ -61,14 +58,15 @@ export const Message = ({ props }: { props: MessageProps }) => {
   }
 
   return (
-    <div className="flex gap-x-2 hover:bg-neutral-900 hover:rounded-md p-3">
+    <div className="flex gap-x-2 hover:bg-neutral-900 hover:rounded-md p-3 items-center">
       <div>
         <Image
           src={props.users?.avatar_url || ''}
           alt={props.users?.username || ''}
-          width={40}
-          height={40}
-          className="object-contain rounded-full"
+          width={35}
+          height={35}
+          quality={100}
+          className="object-cover rounded-full"
         />
       </div>
       <div className="flex-1">
@@ -80,7 +78,14 @@ export const Message = ({ props }: { props: MessageProps }) => {
           {props.user_id === user?.id && (<MessageMenu actionProps={props} update={setIsEdit} />)}
         </div>
         <div className={cn("pt-0", isEdit && "pt-2")}>
-          {isEdit ? (<Input id="message" defaultValue={props.content} onKeyDown={handleWhenEdit} />) : (<p className="text-gray-300 "> {props.content}</p>)}
+          {isEdit ? (
+            <Input id="message" defaultValue={props.content} onKeyDown={handleWhenEdit} />
+          ) : (
+            <p className="text-gray-300">
+              {props.content}
+              {props.is_edit && <span className="text-neutral-500 text-xs"> (edited) </span>}
+            </p>
+          )}
         </div>
       </div>
     </div>
