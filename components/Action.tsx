@@ -45,6 +45,8 @@ export const MessageMenu: React.FC<MessageMenuProp> = ({ actionProps, update }) 
     const deleteMessage = useMessageStore((state) => state.deleteMsg)
 
     const handleDeleteMessage = async () => {
+        setIsOpen(false)
+        
         const supabase = supabaseBrowserClient()
         const {data, error} = await supabase.from("messages").delete().eq("id", actionProps.id)
         
@@ -55,7 +57,6 @@ export const MessageMenu: React.FC<MessageMenuProp> = ({ actionProps, update }) 
             })
           }
           else {
-            setIsOpen(false)
             deleteMessage(actionProps.id)
           }
     }
