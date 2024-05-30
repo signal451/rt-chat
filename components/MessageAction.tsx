@@ -20,8 +20,7 @@ export const DeleteAction = () => {
   const deleteMessage = useMessageStore((state) => state.deleteMsg)
 
   const handleDeleteMessage = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation()
-
+       
     const supabase = supabaseBrowserClient()
     const {data, error} = await supabase.from('messages').delete().eq("id", message?.id!)
 
@@ -33,9 +32,6 @@ export const DeleteAction = () => {
     }
     else {
       deleteMessage(message?.id!)
-      toast.success("Successfully deleted message", {
-        position: 'top-center'
-      })
     }
   }
 

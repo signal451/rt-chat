@@ -1,7 +1,6 @@
 "use client"
 import { MessageProps, useMessageStore } from "@/lib/hooks/useMessages"
 import { Message } from "./Message"
-import { DeleteAction } from "./MessageAction"
 import { supabaseBrowserClient } from "@/utils/supabase/client"
 import { useEffect, useRef } from "react"
 import { toast } from "sonner"
@@ -18,13 +17,14 @@ export default function ListMessages() {
 
   const { message, addMessage, deleteMsg, updateMsg } = useMessageStore((state) => state)
   const supabase = supabaseBrowserClient()
+  const isUserScrolling = useRef(false)
 
   const scrollRef = useRef() as React.MutableRefObject<HTMLDivElement>
 
   useEffect(() => {
     const channel = supabase
       .channel('chat-room')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages'}, payload => {
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages' }, payload => {
 
         const user_id = payload.new.user_id
         const fetchInsert = async () => {
@@ -46,17 +46,17 @@ export default function ListMessages() {
         }
         fetchInsert()
       })
-      .on('postgres_changes',  { event: 'DELETE', schema: 'public', table: 'messages'}, payload => {
+      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'messages' }, payload => {
         deleteMsg(payload.old.id)
       })
-      .on('postgres_changes', {event: 'UPDATE', schema: 'public', table: 'messages'}, payload => {
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'messages' }, payload => {
         const fetchUpdate = async () => {
           const { data, error } = await supabase.from("users").select('*').eq('id', payload.new.user_id).single()
           const rt_message = {
             ...payload.new,
             users: data
           }
-          updateMsg(rt_message as MessageProps) 
+          updateMsg(rt_message as MessageProps)
         }
         fetchUpdate()
       })
@@ -68,31 +68,59 @@ export default function ListMessages() {
 
   }, [])
 
-  useEffect(() => {
-    const scrollContainer = scrollRef.current
+    const scrollToBottom = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({
+        top: scrollRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
+    } 
+  };
 
-    if (scrollContainer) {
-      scrollContainer.scrollTo({
-        top: scrollContainer.scrollHeight,
-        behavior: "smooth"
-      })
+
+  const checkUserScrolling = () => {
+    if (scrollRef.current) {
+      const isAtBottom = scrollRef.current.scrollHeight - scrollRef.current.scrollTop === scrollRef.current.clientHeight
+      isUserScrolling.current = !isAtBottom
+    }
+  }
+
+  useEffect(() => {
+    const currentScrollRef = scrollRef.current
+
+    if (currentScrollRef) {
+      currentScrollRef.addEventListener("scroll", checkUserScrolling)
     }
 
-    // useEffect added hiij baigaa tohioldol deer l scroll to bottom hiimeer bn ?
-  
+    return () => {
+      if (currentScrollRef) {
+        currentScrollRef.removeEventListener("scroll", checkUserScrolling)
+      }
+    }
 
-  }, [message])
+  }, [])
+
+
+  useEffect(() => {
+
+    const currentScrollRef = scrollRef.current
+
+    if(currentScrollRef && !isUserScrolling.current) {
+      scrollToBottom()
+    }
+
+  }, [message, isUserScrolling])
+
 
   return (
-    <div className="flex-1 flex flex-col p-4 overflow-y-auto" ref={scrollRef}>
-      <div className="flex-1"> </div>
+    <div className="flex-1 flex flex-col px-3 pb-3 overflow-y-auto" ref={scrollRef}>
+      <div className="flex-1"/>
       <div>
         {message.map((value, index) => {
           return (
             <Message props={value} key={index} />
           )
         })}
-        <DeleteAction />
       </div>
     </div>
   )

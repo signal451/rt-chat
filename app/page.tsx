@@ -16,11 +16,12 @@ export default async function Home() {
   
   return (
     <>
-      <main className="md:py-10 md:max-w-xl h-screen mx-auto">
+      <main className="md:py-10 md:max-w-2xl h-screen mx-auto">
         <div className="h-full border rounded-md flex flex-col">
           <ChatHeader user={data} /> 
           <ChatMessages/>
           <ChatInput/>
+          
         </div>
       </main>
       <InitUser user={data} />

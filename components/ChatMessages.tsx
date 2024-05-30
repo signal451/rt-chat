@@ -7,7 +7,7 @@ import SkeltonMessage from "./SkeltonMessage";
 export default async function ChatMessages() {
 
     const supabase = supabaseServerClient()
-    const { data } = await supabase.from('messages').select("*, users(*)")
+    const { data } = await supabase.from('messages').select("*, users(*)").order('created_at', {ascending: true})
 
     return (
         <Suspense fallback={<SkeltonMessage/>}>
