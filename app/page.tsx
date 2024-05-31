@@ -21,7 +21,6 @@ export default async function Home() {
           <ChatHeader user={data} /> 
           <ChatMessages/>
           <ChatInput/>
-          
         </div>
       </main>
       <InitUser user={data} />

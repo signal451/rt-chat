@@ -30,11 +30,6 @@ export const ChatHeader = ({ user }: { user: User | null }) => {
       <div className="flex items-center">
       <div className="flex-col">
           <h1 className="font-semibold text-lg"> Kizuna Chat </h1>
-          <div className="flex justify-start items-center">
-            <div className="w-2 h-2 bg-green-700 rounded-full mr-1">
-            </div>
-            <p className="text-sm"> 1 onlines</p>
-          </div>
           </div>
       </div>
       {user ? (
